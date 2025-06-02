@@ -103,7 +103,7 @@ class VapixAPI:
         except requests.RequestException as e:
             raise e
         
-    def _send_request_vanilla(self, endpoint, method="GET", params=None):
+    def _send_request_vanilla(self, endpoint, method="GET", params=None, json_data=None):
         """
         Send a request to a specific VAPIX API endpoint without base arguments.
 
@@ -114,7 +114,9 @@ class VapixAPI:
         method : str, optional
             HTTP request method (default is "GET").
         params : dict, optional
-            Parameters to be included in the request.
+            Parameters to be included in the request (for GET requests or form data).
+        json_data : dict, optional
+            JSON data to be sent in the request body (for POST requests).
 
         Returns:
         --------
@@ -132,7 +134,10 @@ class VapixAPI:
             if method == "GET":
                 response = self.session.get(url, params=params)
             elif method == "POST":
-                response = self.session.post(url, data=params)
+                if json_data is not None:
+                    response = self.session.post(url, json=json_data)
+                else:
+                    response = self.session.post(url, data=params)
             response.raise_for_status()
             return response.text
         except requests.RequestException as e:
