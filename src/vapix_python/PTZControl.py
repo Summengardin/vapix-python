@@ -9,7 +9,25 @@ class PTZControl:
 
     def __init__(self, api: VapixAPI) -> None:
         self.api = api
-        
+        self.limits = self.get_limits()
+
+    def is_available(self) -> bool:
+        """
+        Checks if the optics are available.
+        """
+        response = self.api._send_request_vanilla("param.cgi", method="GET", params={
+            "action": "list",
+            "group": "Properties.PTZ.PTZ"
+        })
+        return response =="Properties.PTZ.PTZ=yes\n"
+
+    def get_limits(self) -> dict:
+        """
+        Gets the limits of the camera.
+        """
+        resp = self.api._send_request('com/ptz.cgi', params={'query': 'limits'})
+        return resp
+
     def get_current_position(self) -> tuple(float, float, float):
         """
         Gets the current position of the camera.
