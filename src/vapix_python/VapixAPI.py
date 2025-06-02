@@ -81,11 +81,14 @@ class VapixAPI:
             If the request encounters an error.
         """
         url = f"{self.base_url}/{endpoint}"
-        base_args_dict = {
-            'camera': '1',
-            'html': 'no',
-            'timestamp': int(time.time()),
-        }
+        if base_args:
+            base_args_dict = {
+                'camera': '1',
+                'html': 'no',
+                'timestamp': int(time.time()),
+            }
+        else:
+            base_args_dict = {}
         
         if params:
             base_args_dict.update(params)
