@@ -2,6 +2,7 @@ import time
 import requests
 
 from .PTZControl import PTZControl
+from .OpticsControl import OpticsControl
 from .GeolocationAPI import GeolocationAPI
 
 from requests.auth import HTTPDigestAuth
@@ -51,6 +52,7 @@ class VapixAPI:
         self.session.auth = HTTPDigestAuth(self.user, self.password)
         self.session.timeout = timeout
         self.ptz = PTZControl(self)
+        self.optics = OpticsControl(self)
         self.geolocation = GeolocationAPI(self)
 
     def _send_request(self, endpoint, method="GET", params=None, base_args=True):
